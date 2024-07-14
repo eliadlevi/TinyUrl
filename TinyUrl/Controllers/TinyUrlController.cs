@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TinyUrl.DB;
+using TinyUrl.Models;
 
 namespace TinyUrl.Controllers
 {
@@ -7,10 +9,18 @@ namespace TinyUrl.Controllers
     [Route("[controller]")]
     public class TinyUrlController : ControllerBase
     {
-        [HttpPost(Name = "GenerateShortUrl")]
-        public string Post()
+        private readonly UrlsService _urlService;
+        public TinyUrlController(UrlsService urlService)
         {
-            return "s";
+            _urlService = urlService;
+        }
+
+        [HttpPost(Name = "GenerateShortUrl")]
+        public async Task<ActionResult<Url>> Post(Url url)
+        {
+
+            return await _urlService.PostUrlShort(url);
+
         }
     }
 }

@@ -31,5 +31,16 @@ namespace TinyUrl.DB
             return await _urlShortsCollection.Find(x => x.ShortUrl == shortUrl).FirstOrDefaultAsync();
         }
 
+        public async Task<Url?> PostUrlShort(Url url)
+        {
+            var getUrl = await GetUrlShortByShortUrlAsync(url.ShortUrl);
+            if (getUrl == null)
+            {
+                await _urlShortsCollection.InsertOneAsync(url);
+                return url;
+            }
+            return getUrl;
+        }
+
     }
 }

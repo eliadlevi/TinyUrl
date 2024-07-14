@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add the db connection settings to the configuration
 builder.Services.Configure<UrlShortsDatabaseSettings>(
     builder.Configuration.GetSection("UrlShortsDatabase"));
+
 builder.Services.AddSingleton<UrlsService>();
 
 
