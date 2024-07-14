@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TinyUrl.DB;
 using TinyUrl.Models;
+using TinyUrl.UrlShortBL;
 
 namespace TinyUrl.Controllers
 {
@@ -9,17 +9,17 @@ namespace TinyUrl.Controllers
     [Route("[controller]")]
     public class TinyUrlController : ControllerBase
     {
-        private readonly UrlsService _urlService;
-        public TinyUrlController(UrlsService urlService)
+        private readonly IUrlShortning _urlShortning;
+        public TinyUrlController(IUrlShortning urlShortning)
         {
-            _urlService = urlService;
+            _urlShortning = urlShortning;
         }
 
         [HttpPost(Name = "GenerateShortUrl")]
-        public async Task<ActionResult<Url>> Post(Url url)
+        public async Task<ActionResult<Url>> Post(string originalUrl)
         {
 
-            return await _urlService.PostUrlShort(url);
+            return await _urlShortning.RunAsync(originalUrl);
 
         }
     }

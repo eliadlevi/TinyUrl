@@ -1,24 +1,33 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using TinyUrl.Exceptions;
 using TinyUrl.Models;
 
 namespace TinyUrl.DB
 {
-    public class UrlsService
+    public class UrlsMongoService : IUrlDbService
     {
         private readonly IMongoCollection<Url> _urlShortsCollection;
 
-        public UrlsService(
+        public UrlsMongoService(
             IOptions<UrlShortsDatabaseSettings> bookStoreDatabaseSettings)
         {
-            var mongoClient = new MongoClient(
+            try
+            {
+                var mongoClient = new MongoClient(
                 bookStoreDatabaseSettings.Value.ConnectionString);
 
-            var mongoDatabase = mongoClient.GetDatabase(
-                bookStoreDatabaseSettings.Value.DatabaseName);
+                var mongoDatabase = mongoClient.GetDatabase(
+                    bookStoreDatabaseSettings.Value.DatabaseName);
 
-            _urlShortsCollection = mongoDatabase.GetCollection<Url>(
-                bookStoreDatabaseSettings.Value.UrlShortsCollectionName);
+                _urlShortsCollection = mongoDatabase.GetCollection<Url>(
+                    bookStoreDatabaseSettings.Value.UrlShortsCollectionName);
+            }
+            catch (Exception ex)
+            {
+                throw new DBConnectionException("DB connection failed, please validate your cradentials. \n" + ex.Message);
+            }
+
         }
 
         public async Task<Url?> GetUrlShortByOriginalUrlAsync(string originalUrl)
@@ -31,7 +40,7 @@ namespace TinyUrl.DB
             return await _urlShortsCollection.Find(x => x.ShortUrl == shortUrl).FirstOrDefaultAsync();
         }
 
-        public async Task<Url?> PostUrlShort(Url url)
+        public async Task<Url> AddUrlIfNotExist(Url url)
         {
             var getUrl = await GetUrlShortByShortUrlAsync(url.ShortUrl);
             if (getUrl == null)
