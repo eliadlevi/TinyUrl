@@ -1,0 +1,7 @@
+﻿1. To connect to the db edit the appsttings.json file with the right values to look like the example below:
+
+"UrlShortsDatabase": {
+  "ConnectionString": "mongodb://localhost:27017",
+  "DatabaseName": "UrlShorts",
+  "UrlShortsCollectionName": "UrlShorts"
+}
