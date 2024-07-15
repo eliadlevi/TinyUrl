@@ -1,4 +1,6 @@
-﻿namespace TinyUrl.UrlShortBL
+﻿using TinyUrl.UrlShortBL.Checksum;
+
+namespace TinyUrl.UrlShortBL.UrlShortning
 {
     public class ShortUrlCheckSum : IShortUrl
     {

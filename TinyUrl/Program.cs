@@ -1,6 +1,11 @@
+using TinyUrl.Cache;
 using TinyUrl.DB;
 using TinyUrl.Middleware;
-using TinyUrl.UrlShortBL;
+using TinyUrl.Models;
+using TinyUrl.UrlShortBL.Checksum;
+using TinyUrl.UrlShortBL.CreateShortUrl;
+using TinyUrl.UrlShortBL.UrlGetter;
+using TinyUrl.UrlShortBL.UrlShortning;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders().AddConsole();
@@ -13,7 +18,8 @@ builder.Services.Configure<UrlShortsDatabaseSettings>(
 builder.Services.AddSingleton<IChecksum, MD5Checksum>();
 builder.Services.AddSingleton<IShortUrl, ShortUrlCheckSum>();
 builder.Services.AddSingleton<IUrlDbService, UrlsMongoService>();
-builder.Services.AddSingleton<IUrlShortning, UrlShortning>();
+builder.Services.AddSingleton<IShortUrlCreator, ShortUrlCreator>();
+builder.Services.AddSingleton<ICache<string, Url>>(new Cache<string, Url>(2));
 builder.Services.AddSingleton<IOriginalUrlGetter, OriginalUrlGetter>();
 
 // Add services to the container.

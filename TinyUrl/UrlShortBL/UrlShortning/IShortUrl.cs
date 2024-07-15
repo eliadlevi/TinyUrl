@@ -1,4 +1,4 @@
-﻿namespace TinyUrl.UrlShortBL
+﻿namespace TinyUrl.UrlShortBL.UrlShortning
 {
     public interface IShortUrl
     {

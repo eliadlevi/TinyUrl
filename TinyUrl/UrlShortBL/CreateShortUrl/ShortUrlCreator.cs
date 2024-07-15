@@ -1,16 +1,16 @@
 ﻿using TinyUrl.DB;
 using TinyUrl.Exceptions;
 using TinyUrl.Models;
+using TinyUrl.UrlShortBL.UrlShortning;
 
-namespace TinyUrl.UrlShortBL
+namespace TinyUrl.UrlShortBL.CreateShortUrl
 {
-    // Using a checksum to Shortining the url
-    public class UrlShortning : IUrlShortning
+    public class ShortUrlCreator : IShortUrlCreator
     {
         private readonly IShortUrl _shortUrl;
         private readonly IUrlDbService _urlService;
 
-        public UrlShortning(IShortUrl shortUrl,
+        public ShortUrlCreator(IShortUrl shortUrl,
             IUrlDbService urlSerive)
         {
             _shortUrl = shortUrl;
@@ -19,7 +19,7 @@ namespace TinyUrl.UrlShortBL
 
         public async Task<Url> RunAsync(string originalUrl)
         {
-            if (!isValidUrl(originalUrl))
+            if (!IsValidUrl(originalUrl))
             {
                 throw new NotAValidUrlException("The url is not a valid url");
             }
@@ -34,7 +34,7 @@ namespace TinyUrl.UrlShortBL
             return await _urlService.AddUrlIfNotExist(url);
         }
 
-        private bool isValidUrl(string url)
+        private bool IsValidUrl(string url)
         {
             Uri uriResult;
 

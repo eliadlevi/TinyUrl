@@ -1,8 +1,8 @@
 ﻿using TinyUrl.Models;
 
-namespace TinyUrl.UrlShortBL
+namespace TinyUrl.UrlShortBL.CreateShortUrl
 {
-    public interface IUrlShortning
+    public interface IShortUrlCreator
     {
         Task<Url> RunAsync(string originalUrl);
     }

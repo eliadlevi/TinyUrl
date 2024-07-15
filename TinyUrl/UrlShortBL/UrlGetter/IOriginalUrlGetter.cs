@@ -1,6 +1,6 @@
 ﻿using TinyUrl.Models;
 
-namespace TinyUrl.UrlShortBL
+namespace TinyUrl.UrlShortBL.UrlGetter
 {
     public interface IOriginalUrlGetter
     {
