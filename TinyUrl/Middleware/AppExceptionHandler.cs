@@ -16,6 +16,7 @@ namespace TinyUrl.Middleware
             (int statusCode, string errorMesssage) = exception switch
             {
                 DBConnectionException dBConnectionException => (500, dBConnectionException.Message),
+                UrlNotFoundException urlNotFoundException => (404, urlNotFoundException.Message),
                 _ => (500, "Something went wrong")
             };
             _logger.LogError(statusCode, exception.Message);

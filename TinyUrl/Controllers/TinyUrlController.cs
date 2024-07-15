@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TinyUrl.Exceptions;
 using TinyUrl.Models;
 using TinyUrl.UrlShortBL;
 
@@ -6,7 +7,7 @@ namespace TinyUrl.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class TinyUrlController : ControllerBase
     {
         private readonly IUrlShortning _urlShortning;
@@ -25,15 +26,19 @@ namespace TinyUrl.Controllers
             var resultUrl = await _urlShortning.RunAsync(originalUrl);
 
             var address = new Uri(Request.Host.ToString()).AbsoluteUri;
-            resultUrl.ShortUrl = $"{address}/{resultUrl.ShortUrl}";
+            resultUrl.ShortUrl = $"https://{address}/{resultUrl.ShortUrl}";
             return resultUrl;
         }
 
-        //TODO: add method to send a short url and get the orignal url.
         [HttpGet(Name = "GetOriginalUrl")]
+        [HttpGet("{shortUrl}")]
         public async Task<string> Get(string shortUrl)
         {
             var url = await _originalUrlGetter.GetOriginalUrl(shortUrl);
+            if (url == null)
+            {
+                throw new UrlNotFoundException("Url not found, please enter another parameters");
+            }
             return url.OriginalUrl;
         }
 
