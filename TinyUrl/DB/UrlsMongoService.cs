@@ -30,19 +30,19 @@ namespace TinyUrl.DB
 
         }
 
-        public async Task<Url?> GetUrlShortByOriginalUrlAsync(string originalUrl)
+        public async Task<Url?> GetUrlByOriginalUrlAsync(string originalUrl)
         {
             return await _urlShortsCollection.Find(x => x.OriginalUrl == originalUrl).FirstOrDefaultAsync();
         }
 
-        public async Task<Url?> GetUrlShortByShortUrlAsync(string shortUrl)
+        public async Task<Url?> GetUrlByShortUrlAsync(string shortUrl)
         {
             return await _urlShortsCollection.Find(x => x.ShortUrl == shortUrl).FirstOrDefaultAsync();
         }
 
         public async Task<Url> AddUrlIfNotExist(Url url)
         {
-            var getUrl = await GetUrlShortByShortUrlAsync(url.ShortUrl);
+            var getUrl = await GetUrlByShortUrlAsync(url.ShortUrl);
             if (getUrl == null)
             {
                 await _urlShortsCollection.InsertOneAsync(url);

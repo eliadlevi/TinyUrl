@@ -4,8 +4,8 @@ namespace TinyUrl.DB
 {
     public interface IUrlDbService
     {
-        Task<Url?> GetUrlShortByOriginalUrlAsync(string originalUrl);
-        Task<Url?> GetUrlShortByShortUrlAsync(string shortUrl);
+        Task<Url?> GetUrlByOriginalUrlAsync(string originalUrl);
+        Task<Url?> GetUrlByShortUrlAsync(string shortUrl);
 
         Task<Url> AddUrlIfNotExist(Url url);
     }
