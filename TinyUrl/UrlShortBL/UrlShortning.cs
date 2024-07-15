@@ -1,4 +1,5 @@
 ﻿using TinyUrl.DB;
+using TinyUrl.Exceptions;
 using TinyUrl.Models;
 
 namespace TinyUrl.UrlShortBL
@@ -18,6 +19,11 @@ namespace TinyUrl.UrlShortBL
 
         public async Task<Url> RunAsync(string originalUrl)
         {
+            if (!isValidUrl(originalUrl))
+            {
+                throw new NotAValidUrlException("The url is not a valid url");
+            }
+
             var shortUrl = _shortUrl.CreateShortUrl(originalUrl);
 
             Url url = new()
@@ -26,6 +32,15 @@ namespace TinyUrl.UrlShortBL
                 ShortUrl = shortUrl
             };
             return await _urlService.AddUrlIfNotExist(url);
+        }
+
+        private bool isValidUrl(string url)
+        {
+            Uri uriResult;
+
+            return Uri.TryCreate(url, UriKind.Absolute, out uriResult) &&
+            (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
         }
     }
 }

@@ -17,6 +17,7 @@ namespace TinyUrl.Middleware
             {
                 DBConnectionException dBConnectionException => (500, dBConnectionException.Message),
                 UrlNotFoundException urlNotFoundException => (404, urlNotFoundException.Message),
+                NotAValidUrlException notAValidUrlException => (404, notAValidUrlException.Message),
                 _ => (500, "Something went wrong")
             };
             _logger.LogError(statusCode, exception.Message);
