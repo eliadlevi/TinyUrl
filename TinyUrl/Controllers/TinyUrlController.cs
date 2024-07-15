@@ -32,15 +32,14 @@ namespace TinyUrl.Controllers
 
         [HttpGet(Name = "GetOriginalUrl")]
         [HttpGet("{shortUrl}")]
-        public async Task<string> Get(string shortUrl)
+        public async Task RedirectToOriginalUrl(string shortUrl)
         {
             var url = await _originalUrlGetter.GetOriginalUrl(shortUrl);
             if (url == null)
             {
                 throw new UrlNotFoundException("Url not found, please enter another parameters");
             }
-            return url.OriginalUrl;
+            Response.Redirect(url.OriginalUrl);
         }
-
     }
 }
