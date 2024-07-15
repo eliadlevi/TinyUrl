@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TinyUrl.Exceptions;
 using TinyUrl.Models;
-using TinyUrl.UrlShortBL;
+using TinyUrl.UrlShortBL.CreateShortUrl;
+using TinyUrl.UrlShortBL.UrlGetter;
 
 namespace TinyUrl.Controllers
 {
@@ -10,10 +11,10 @@ namespace TinyUrl.Controllers
     [Route("/")]
     public class TinyUrlController : ControllerBase
     {
-        private readonly IUrlShortning _urlShortning;
+        private readonly IShortUrlCreator _urlShortning;
         private readonly IOriginalUrlGetter _originalUrlGetter;
 
-        public TinyUrlController(IUrlShortning urlShortning,
+        public TinyUrlController(IShortUrlCreator urlShortning,
             IOriginalUrlGetter originalUrlGetter)
         {
             _urlShortning = urlShortning;
@@ -21,7 +22,7 @@ namespace TinyUrl.Controllers
         }
 
         [HttpPost(Name = "GenerateShortUrl")]
-        public async Task<ActionResult<Url>> Post(string originalUrl)
+        public async Task<ActionResult<Url>> CreateShortUrl(string originalUrl)
         {
             var resultUrl = await _urlShortning.RunAsync(originalUrl);
 
