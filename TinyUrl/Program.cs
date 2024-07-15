@@ -14,7 +14,7 @@ builder.Services.AddSingleton<IChecksum, MD5Checksum>();
 builder.Services.AddSingleton<IShortUrl, ShortUrlCheckSum>();
 builder.Services.AddSingleton<IUrlDbService, UrlsMongoService>();
 builder.Services.AddSingleton<IUrlShortning, UrlShortning>();
-
+builder.Services.AddSingleton<IOriginalUrlGetter, OriginalUrlGetter>();
 
 // Add services to the container.
 
