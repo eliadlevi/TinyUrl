@@ -30,11 +30,6 @@ namespace TinyUrl.DB
 
         }
 
-        public async Task<Url?> GetUrlByOriginalUrlAsync(string originalUrl)
-        {
-            return await _urlShortsCollection.Find(x => x.OriginalUrl == originalUrl).FirstOrDefaultAsync();
-        }
-
         public async Task<Url?> GetUrlByShortUrlAsync(string shortUrl)
         {
             return await _urlShortsCollection.Find(x => x.ShortUrl == shortUrl).FirstOrDefaultAsync();
