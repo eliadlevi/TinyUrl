@@ -25,7 +25,7 @@ namespace TinyUrl.DB
             }
             catch (Exception ex)
             {
-                throw new DBConnectionException("DB connection failed, please validate your cradentials. \n" + ex.Message);
+                throw new DBConnectionException("DB connection failed, please validate your cradentials." + ex.Message);
             }
 
         }

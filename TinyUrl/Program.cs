@@ -1,7 +1,11 @@
 using TinyUrl.DB;
+using TinyUrl.Middleware;
 using TinyUrl.UrlShortBL;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders().AddConsole();
+
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
 
 // Add the db connection settings to the configuration
 builder.Services.Configure<UrlShortsDatabaseSettings>(
@@ -29,9 +33,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseExceptionHandler(_ => { });
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.Logger.LogInformation("Starting the app");
 app.Run();
