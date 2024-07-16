@@ -34,11 +34,9 @@ namespace TinyUrl.UrlShortBL.CreateShortUrl
             return await _urlService.AddUrlIfNotExist(url);
         }
 
-        private bool IsValidUrl(string url)
+        private static bool IsValidUrl(string url)
         {
-            Uri uriResult;
-
-            return Uri.TryCreate(url, UriKind.Absolute, out uriResult) &&
+            return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult) &&
             (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
         }
