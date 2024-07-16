@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using TinyUrl.Exceptions;
+using TinyUrl.Logger;
 
 namespace TinyUrl.Middleware
 {
     public class AppExceptionHandler : IExceptionHandler
     {
-        private readonly ILogger _logger;
-        public AppExceptionHandler(ILogger<AppExceptionHandler> logger)
+        private readonly ILog _logger;
+        public AppExceptionHandler(ILog logger)
         {
             _logger = logger;
         }
@@ -20,7 +21,7 @@ namespace TinyUrl.Middleware
                 NotAValidUrlException notAValidUrlException => (404, notAValidUrlException.Message),
                 _ => (500, "Something went wrong")
             };
-            _logger.LogError(statusCode, exception.Message);
+            _logger.LogError($"Exception Catched by the AppExceptionHandler with statusCode: {statusCode} Exception: {exception.Message}");
             httpContext.Response.StatusCode = statusCode;
             await httpContext.Response.WriteAsJsonAsync(errorMesssage);
             return true;

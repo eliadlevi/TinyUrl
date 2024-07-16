@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using TinyUrl.Logger;
 
 namespace TinyUrl.Cache
 {
@@ -12,12 +13,14 @@ namespace TinyUrl.Cache
 
         // Store the object of the cache
         private readonly ConcurrentDictionary<TKey, TValue> _dictionary = new();
+        private readonly ILog _log;
 
         // The size of the cache is dependent on the client and can change according to the mechine capabilities and the service Needs.
         // The object removal Least used object removed first.
-        public Cache(int maxSize)
+        public Cache(int maxSize, ILog logger)
         {
             _maxSize = maxSize;
+            _log = logger;
         }
 
         public TValue? Get(TKey key)
@@ -45,10 +48,13 @@ namespace TinyUrl.Cache
             {
                 if (!_queue.TryDequeue(out var queueKey))
                 {
+                    _log.LogWarning($"Couldn't remove key: {key} from the cache");
                     return false;
                 }
                 if (!_dictionary.Remove(queueKey, out var removeDicResult))
                 {
+                    _log.LogWarning($"Couldn't remove key: {key} from the dictionary");
+
                     return false;
                 }
             }

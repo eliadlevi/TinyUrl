@@ -1,6 +1,7 @@
 ﻿using TinyUrl.Cache;
 using TinyUrl.DB;
 using TinyUrl.Exceptions;
+using TinyUrl.Logger;
 using TinyUrl.Models;
 
 namespace TinyUrl.UrlShortBL.UrlGetter
@@ -9,10 +10,10 @@ namespace TinyUrl.UrlShortBL.UrlGetter
     {
         private readonly IUrlDbService _urlService;
         private readonly ICache<string, Url> _cache;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         public OriginalUrlGetter(ICache<string, Url> cache,
             IUrlDbService urlService,
-            ILogger logger)
+            ILog logger)
         {
             _cache = cache;
             _urlService = urlService;
@@ -24,7 +25,6 @@ namespace TinyUrl.UrlShortBL.UrlGetter
         // Getting the object form the db and return 
         public async Task<Url> GetOriginalUrl(string shortUrl)
         {
-            _logger.LogInformation("log");
             var shortUrlClean = shortUrl.Split('/')[^1];
 
             var cacheResult = _cache.Get(shortUrlClean);
