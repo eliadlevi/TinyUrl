@@ -1,4 +1,5 @@
 ﻿1. To connect to the db edit the appsttings.json file with the right values to look like the example below:
+make sure that the DatabaseName,  and collection are exist in your db.
 
 "UrlShortsDatabase": {
   "ConnectionString": "mongodb://localhost:27017",
@@ -6,3 +7,20 @@
   "UrlShortsCollectionName": "UrlShorts"
 }
 
+2. There are two methods that you can execute with this project.
+	a. one is the post method that gets a long url, creates a checksum, and saves it to the mongo with the original url. 
+	that will be used to create a URL that the client can enter and be redirected to the original path by using the method in point b.
+	b. get a checksum as a parameter, go to the mongo/cache and get the original url, and redirect the client to it (same way as in TinyUrl).
+
+	checksum use: I used the md5 checksum because it has a balance between the length of the output hash and the collision safety.
+
+3. Part 2 answer
+	Cache: 
+	I chose to add a URL to the cache when it was requested to prevent overflow.
+	I save the URLs being requested in a dictionary so that the get will be as fast as it can and it will be easy to manage by the programmer.
+	To manage the usability of a url, I use a queue, and each time a url is requested, it is added or moved to the top, which results in the urls
+	being cleaned by usability.
+	The size limit of the cache can be set by the cache package client to the amount he finds fit according to:
+    machine capabilities and system scale.
+	To prevent overriding of the data and collision of the cache, I used a concurrent queue and a concurrent dictionary.
+	The service first checks if the data exists in the cache and then checks if the data is in Mongo to minimize the number of calls to the database and save time.
